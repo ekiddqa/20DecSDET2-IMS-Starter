@@ -99,7 +99,7 @@ public class ItemDao implements IDomainDao<Item> {
     public int delete(long id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();) {
-            return statement.executeUpdate("delete from Items where id = " + id);
+            return statement.executeUpdate("delete from items where id = " + id);
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
@@ -110,7 +110,7 @@ public class ItemDao implements IDomainDao<Item> {
     @Override
     public Item modelFromResultSet(ResultSet resultSet) throws SQLException {
         Long id = resultSet.getLong("id");
-        String name = resultSet.getString("first_name");
+        String name = resultSet.getString("name");
         double price = resultSet.getDouble("price");
         return new Item(id, name, price);
     }

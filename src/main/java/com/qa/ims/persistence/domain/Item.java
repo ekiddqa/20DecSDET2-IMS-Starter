@@ -48,16 +48,19 @@ public class Item {
 
 	@Override
 	public int hashCode() {
+		String stringPrice =String.valueOf(price);  
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + ((stringPrice == null) ? 0 : stringPrice.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
+		String stringPrice = String.valueOf(price);
+	 
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -65,6 +68,7 @@ public class Item {
 		if (getClass() != obj.getClass())
 			return false;
 		Item other = (Item) obj;
+		String otherStringPrice = String.valueOf(other.price); 
 		if (getName() == null) {
 			if (other.getName() != null)
 				return false;
@@ -75,10 +79,10 @@ public class Item {
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
-		if (price == null) {
-			if (other.price != null)
+		if (stringPrice == null) {
+			if (otherStringPrice != null)
 				return false;
-		} else if (!price.equals(other.price))
+		} else if (!stringPrice.equals(otherStringPrice))
 			return false;
 		return true;
 	}
