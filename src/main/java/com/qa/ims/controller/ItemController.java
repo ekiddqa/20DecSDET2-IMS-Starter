@@ -27,7 +27,10 @@ public class ItemController implements ICrudController<Item> {
 	    @Override
 	    public List<Item> readAll() {
 	        List<Item> items = itemDao.readAll();
-	        for (Item item : items) {
+	       if(items.isEmpty()) {
+	    	   LOGGER.info("No items in IMS.");
+	       } 
+	       for (Item item : items) {
 	            LOGGER.info(item);
 	        }
 	        return items;
