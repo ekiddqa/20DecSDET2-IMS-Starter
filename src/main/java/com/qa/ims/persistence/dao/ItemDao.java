@@ -22,7 +22,7 @@ public class ItemDao implements IDomainDao<Item> {
     public Item create(Item item) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 PreparedStatement statement = connection
-                        .prepareStatement("INSERT INTO Items(first_name, price) VALUES (?, ?)");) {
+                        .prepareStatement("INSERT INTO Items(name, price) VALUES (?, ?)");) {
             statement.setString(1, item.getName());
             statement.setDouble(2, item.getPrice());
             statement.executeUpdate();
@@ -82,7 +82,7 @@ public class ItemDao implements IDomainDao<Item> {
     public Item update(Item Item) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 PreparedStatement statement = connection
-                        .prepareStatement("UPDATE Items SET first_name = ?, price = ? WHERE id = ?");) {
+                        .prepareStatement("UPDATE Items SET name = ?, price = ? WHERE id = ?");) {
             statement.setString(1, Item.getName());
             statement.setDouble(2, Item.getPrice());
             statement.setLong(3, Item.getId());
