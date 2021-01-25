@@ -40,7 +40,12 @@ public class ItemController implements ICrudController<Item> {
 	 	@Override
 		public Item create() {
 	 			 LOGGER.info("Please enter a product name");
-	 	        String name = javaUtilities.getString();
+	 	        String n = javaUtilities.getString();
+	 	        String name = n.trim();
+	 	        if (name.isEmpty()) {
+	 	        	LOGGER.info("Invalid entry, name must contain non space characters.");
+	 	        	return null;
+	 	        }
 	 	        LOGGER.info("Please enter the price");
 	 	        String p = javaUtilities.getString();
 	 	        try {
