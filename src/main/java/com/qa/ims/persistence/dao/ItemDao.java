@@ -22,7 +22,7 @@ public class ItemDao implements IDomainDao<Item> {
     public Item create(Item item) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 PreparedStatement statement = connection
-                        .prepareStatement("INSERT INTO Items(name, price) VALUES (?, ?)");) {
+                        .prepareStatement("INSERT INTO items(name, price) VALUES (?, ?)");) {
             statement.setString(1, item.getName());
             statement.setDouble(2, item.getPrice());
             statement.executeUpdate();
@@ -36,7 +36,7 @@ public class ItemDao implements IDomainDao<Item> {
 
     public Item read(Long id) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-                PreparedStatement statement = connection.prepareStatement("SELECT * FROM Items WHERE id = ?");) {
+                PreparedStatement statement = connection.prepareStatement("SELECT * FROM items WHERE id = ?");) {
             statement.setLong(1, id);
             ResultSet resultSet = statement.executeQuery();
             resultSet.next();
@@ -52,7 +52,7 @@ public class ItemDao implements IDomainDao<Item> {
     public List<Item> readAll() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM Items");) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM items");) {
             List<Item> Items = new ArrayList<>();
             while (resultSet.next()) {
                 Items.add(modelFromResultSet(resultSet));
@@ -68,7 +68,7 @@ public class ItemDao implements IDomainDao<Item> {
     public Item readLatest() {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
-                ResultSet resultSet = statement.executeQuery("SELECT * FROM Items ORDER BY id DESC LIMIT 1");) {
+                ResultSet resultSet = statement.executeQuery("SELECT * FROM items ORDER BY id DESC LIMIT 1");) {
             resultSet.next();
             return modelFromResultSet(resultSet);
         } catch (Exception e) {
@@ -79,15 +79,15 @@ public class ItemDao implements IDomainDao<Item> {
     }
 
     @Override
-    public Item update(Item Item) {
+    public Item update(Item item) {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 PreparedStatement statement = connection
-                        .prepareStatement("UPDATE Items SET name = ?, price = ? WHERE id = ?");) {
-            statement.setString(1, Item.getName());
-            statement.setDouble(2, Item.getPrice());
-            statement.setLong(3, Item.getId());
+                        .prepareStatement("UPDATE items SET name = ?, price = ? WHERE id = ?");) {
+            statement.setString(1, item.getName());
+            statement.setDouble(2, item.getPrice());
+            statement.setLong(3, item.getId());
             statement.executeUpdate();
-            return read(Item.getId());
+            return read(item.getId());
         } catch (Exception e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());
