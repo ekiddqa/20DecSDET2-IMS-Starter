@@ -53,11 +53,11 @@ public class ItemDao implements IDomainDao<Item> {
         try (Connection connection = DatabaseUtilities.getInstance().getConnection();
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT * FROM items");) {
-            List<Item> Items = new ArrayList<>();
+            List<Item> items = new ArrayList<>();
             while (resultSet.next()) {
-                Items.add(modelFromResultSet(resultSet));
+                items.add(modelFromResultSet(resultSet));
             }
-            return Items;
+            return items;
         } catch (SQLException e) {
             LOGGER.debug(e);
             LOGGER.error(e.getMessage());

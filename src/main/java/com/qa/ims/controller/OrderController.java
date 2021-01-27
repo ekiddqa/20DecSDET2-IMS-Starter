@@ -98,5 +98,7 @@ public class OrderController implements ICrudController<Order> {
         Long id = javaUtilities.getLong();
         return orderDao.delete(id);
 	}
-    
+    //delete an order
+	//delete an item
+	//sum an order
 }

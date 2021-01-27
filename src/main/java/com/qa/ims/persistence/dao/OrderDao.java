@@ -7,8 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
-import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +19,14 @@ import com.qa.ims.utils.DatabaseUtilities;
 public class OrderDao implements IDomainDao<Order> {
 
 	    public static final Logger LOGGER = LogManager.getLogger();
-	    private ItemDao itemDao;
 	    private CustomerDao customerDao;
+	    
+	    public OrderDao() {
+	    	super();
+	    }
 	    
 	    public OrderDao(ItemDao itemDao, CustomerDao customerDao) {
 	    	super();
-	    	this.itemDao = itemDao;
 	    	this.customerDao = customerDao;
 	    }
 
@@ -95,19 +95,19 @@ public class OrderDao implements IDomainDao<Order> {
 	        return null;
 	    }
     
-	    public List<Item> getItems(Order order) {
+	    public List<Item> getItems(Long id) {
 		    try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                PreparedStatement statement = connection
 	                        .prepareStatement("SELECT order_item.fk_item_id, items.name, items.price FROM orders_items "
 	                        		+ "JOIN order_items oi ON items.id = oi.fk_item_id WHERE oi.fk_item_id=?;")){
 		    	List<Item> grabItems= new ArrayList<>();
-	            statement.setLong(1, order.getId());
+	            statement.setLong(1, id);
 	            ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
 	            	Long i = resultSet.getLong("fk_item_id");
 	            	String name= resultSet.getString("name");
 	            	Double price=resultSet.getDouble("price");
-	            	grabItems.add(new Item(name,price));
+	            	grabItems.add(new Item(i, name, price));
 	            }
 	            return grabItems;
 	        } catch (Exception e) {
@@ -120,7 +120,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order addItems(Long orderId, Long itemId) {
 	    	   try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                PreparedStatement statement = connection
-		                        .prepareStatement("INSERT INTO orders_item (fk_order_id, fk_item_id) VALUE (?,)");) {
+		                        .prepareStatement("INSERT INTO orders_item (fk_order_id, fk_item_id) VALUE (?)");) {
 		        	statement.setLong(1, orderId);
 		        	statement.setLong(2, itemId);
 		            statement.executeUpdate(); 
@@ -132,29 +132,8 @@ public class OrderDao implements IDomainDao<Order> {
 		        return null;
 		    }
 	    
-	    public double sumValue(Long id) {
-	    	double sum = 0;
-	    	itemList = 
-	    	for(Item i: item) {
-	    		
-	    	}
-	    	return sum;
-	    }
-	    
 	    @Override
 	    public Order update(Order order) {
-	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	                PreparedStatement statement = connection
-	                        .prepareStatement("UPDATE oWHERE id = ?, UPDATE order_item SET item");) {
-	            order.getItem().stream().forEach(x -> statement.setLong(1, order.getCustomer().getId()),
-	            statement.setLong(2, order.getItem().),
-	            statement.setLong(3, order.getId()));
-	            statement.executeUpdate();
-	            return read(order.getId());
-	        } catch (Exception e) {
-	            LOGGER.debug(e);
-	            LOGGER.error(e.getMessage());
-	        }
 	        return null;
 	    }
 
@@ -172,7 +151,7 @@ public class OrderDao implements IDomainDao<Order> {
 	     public Order deleteItem(long id, long orderId) { //delete an item from an order
 		      try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		              Statement statement = connection.createStatement();) {
-		         statement.executeUpdate("delete from orders_items where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
+		         statement.executeUpdate("DELETE FROM orders_items where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
@@ -183,7 +162,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 	        Long id = resultSet.getLong("id");
 	        Customer customer = customerDao.read(resultSet.getLong("fk_customer_id")); //init customerId
-	        List<Item> item = getItem();//need to make a get items only from order method
+	        List<Item> item = getItems(resultSet.getLong("id"));//need to make a get items only from order method
 	        return new Order(id, customer, item);
 	    }
 
