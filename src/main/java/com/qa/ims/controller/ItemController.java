@@ -11,7 +11,6 @@ import com.qa.ims.utils.JavaUtilities;
 
 
 public class ItemController implements ICrudController<Item> {
-	//yelling because CRUD methods aren't final since they need to convert to doubles
 
 	    public static final Logger LOGGER = LogManager.getLogger();
 
