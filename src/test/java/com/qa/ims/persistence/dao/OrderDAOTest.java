@@ -9,11 +9,15 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
+import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DatabaseUtilities;
 
 public class OrderDAOTest {
-
 	 private final OrderDao DAO = new OrderDao();
+	 List<Order> expected = new ArrayList<>();
+     Customer customer = new Customer(1L, "nick", "johnson");
+     List<Item> item = new ArrayList<>();
 
 	    @Before
 	    public void setup() {
@@ -23,33 +27,36 @@ public class OrderDAOTest {
 
 	    @Test
 	    public void testCreate() {
-	        final Customer created = new Customer(2L, "nick", "johnson");
+	    	Customer customer = new Customer(1L, "nick", "johnson");
+	        final Order created = new Order(2L, customer, item);
 	        assertEquals(created, DAO.create(created));
 	    }
 
 	    @Test
 	    public void testReadAll() {
-	        List<Customer> expected = new ArrayList<>();
-	        expected.add(new Customer(1L, "jordan", "harrison"));
+	        List<Order> expected = new ArrayList<>();
+	        expected.add(new Order(1L, customer, item));
 	        assertEquals(expected, DAO.readAll());
 	    }
 
 	    @Test
 	    public void testReadLatest() {
-	        assertEquals(new Customer(1L, "jordan", "harrison"), DAO.readLatest());
+	        assertEquals(new Order(1L, customer, item), DAO.readLatest());
 	    }
 
 	    @Test
 	    public void testRead() {
 	        final long ID = 1L;
-	        assertEquals(new Customer(ID, "jordan", "harrison"), DAO.read(ID));
+	        assertEquals(new Order(ID, customer, item), DAO.read(ID));
 	    }
 
 	    @Test
 	    public void testUpdate() {
-	        final Customer updated = new Customer(1L, "nick", "johnson");
+	    	List<Item> updatedItem = new ArrayList<>();
+	    	Customer updatedCustomer = new Customer("jordan", "harrison");
+	        final Order updated = new Order(1L, updatedCustomer, updatedItem);
 	        assertEquals(updated, DAO.update(updated));
-
+	        
 	    }
 
 	    @Test
