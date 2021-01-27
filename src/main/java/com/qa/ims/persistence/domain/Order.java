@@ -1,6 +1,9 @@
 package com.qa.ims.persistence.domain;
 
 import java.util.List;
+import java.util.stream.Stream;
+
+
 
 public class Order {
 
@@ -8,16 +11,26 @@ public class Order {
 	Customer customer;
 	Double value;
 	List<Item> items;
+	Stream<Item> itemIteration = items.stream();
 	
-	public Order(Customer Customer, List<Item> items) {
-		this.setCustomer(Customer);
-		this.setItem(items);
+	public Order(Customer customer, List<Item> items) {
+		this.setCustomer(customer);
+		this.setItems(items);
 	}
-
+    
 	public Order(Long id, Customer customer, List<Item> items) {
 		this.setId(id);
 		this.setCustomer(customer);
-		this.setItem(items);
+		this.setItems(items);
+	}
+	
+	public Order(Customer customer, Double value) {
+		this.customer = customer;
+		this.value = value;
+	}
+	
+	public Order(Customer customer) {
+		this.setCustomer(customer);
 	}
 
 	public Long getId() {
@@ -35,18 +48,38 @@ public class Order {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-
-	public List<Item> getItem() {
+	
+	public List<Item> getItems() {
 		return items;
 	}
 
-	public void setItem(List<Item> items) {
+	public void setItems(List<Item> items) {
 		this.items = items;
+	}
+	
+	public Stream<Item> getItemIteration() {
+		return itemIteration;
+	}
+
+	public void setItemIteration(Stream<Item> itemIteration) {
+		this.itemIteration = itemIteration;
 	}
 
 	@Override
 	public String toString() {
-		return "id: " + id + " Customer Name: " + customer + " Items: " + items;
+		StringBuilder order = new StringBuilder();
+		order.append(
+				String.format("%s: %s %s", this.id, customer.getFirstName(), customer.getSurname()));
+		if(this.items.isEmpty()) {
+			order.append("\n No items found in this order.");
+		} else {
+			order.append(String.format(" value = £%.2f", this.value));
+			this.items.forEach(item -> {
+				order.append("\n -> ");
+				order.append(String.format("%s: £%.2f", item.getName(), item.getPrice()));
+			});
+		}
+		return order.toString();
 	}
 
 	@Override
@@ -85,4 +118,15 @@ public class Order {
 			return false;
 		return true;
 	}
+	
+	public double sumValue() {
+		this.itemIteration.forEach(item -> 
+		    value += item.getPrice());
+		return value;
+	}
+	
+	public Long getCustomerId(Customer customer) {
+		return customer.getId();
+	}
+	
 }
