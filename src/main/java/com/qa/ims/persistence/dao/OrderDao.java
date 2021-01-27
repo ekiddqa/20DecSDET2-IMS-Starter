@@ -95,10 +95,28 @@ public class OrderDao implements IDomainDao<Order> {
 	        return null;
 	    }
     
-	    public Item getItems(Long id) {
-			return itemDao.read(id);
-	    	
-	    }
+	    public List<Item> getItems(Order order) {
+		    try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	                PreparedStatement statement = connection
+	                        .prepareStatement("SELECT order_item.fk_item_id, items.name, items.price FROM orders_items "
+	                        		+ "JOIN order_items oi ON items.id = oi.fk_item_id WHERE oi.fk_item_id=?;")){
+		    	List<Item> grabItems= new ArrayList<>();
+	            statement.setLong(1, order.getId());
+	            ResultSet resultSet = statement.executeQuery();
+	            while (resultSet.next()) {
+	            	Long i = resultSet.getLong("fk_item_id");
+	            	String name= resultSet.getString("name");
+	            	Double price=resultSet.getDouble("price");
+	            	grabItems.add(new Item(name,price));
+	            }
+	            return grabItems;
+	        } catch (Exception e) {
+	        	LOGGER.debug(e);
+	        	LOGGER.error(e.getMessage());
+	        }
+	        return null;
+		}
+	    
 	    public Order addItems(Long orderId, Long itemId) {
 	    	   try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                PreparedStatement statement = connection
@@ -116,7 +134,10 @@ public class OrderDao implements IDomainDao<Order> {
 	    
 	    public double sumValue(Long id) {
 	    	double sum = 0;
-	    	order.getItem.stream().forEach(item -> sum += sum + item.getPrice());
+	    	itemList = 
+	    	for(Item i: item) {
+	    		
+	    	}
 	    	return sum;
 	    }
 	    
@@ -124,7 +145,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order update(Order order) {
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                PreparedStatement statement = connection
-	                        .prepareStatement("UPDATE order SET customer = ?, WHERE id = ?, UPDATE order_item SET item");) {
+	                        .prepareStatement("UPDATE oWHERE id = ?, UPDATE order_item SET item");) {
 	            order.getItem().stream().forEach(x -> statement.setLong(1, order.getCustomer().getId()),
 	            statement.setLong(2, order.getItem().),
 	            statement.setLong(3, order.getId()));
