@@ -20,6 +20,7 @@ public class OrderDao implements IDomainDao<Order> {
 
 	    public static final Logger LOGGER = LogManager.getLogger();
 	    private CustomerDao customerDao;
+	    private ItemDao itemDao;
 	    
 	    public OrderDao() {
 	    	super();
@@ -27,6 +28,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    
 	    public OrderDao(ItemDao itemDao, CustomerDao customerDao) {
 	    	super();
+	    	this.itemDao = itemDao;
 	    	this.customerDao = customerDao;
 	    }
 
@@ -34,7 +36,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order create(Order order) {
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                PreparedStatement statementOrder = connection
-	                        .prepareStatement("INSERT INTO orders(fk_customer_id) VALUE (?)");) {
+	                        .prepareStatement("INSERT INTO orders(fk_customer_id) VALUES (?)");) {
 	        	statementOrder.setLong(1, order.getCustomer().getId());
 	            statementOrder.executeUpdate(); 
 	            return readLatest();
@@ -47,9 +49,10 @@ public class OrderDao implements IDomainDao<Order> {
 
 	    public Order read(Long id) {
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	                PreparedStatement statement = connection.prepareStatement("SELECT orders.id as order_id, first_name.customers, "
-	                		+ "surname.customers, name.item FROM orders, JOIN orders on order_item.fk_order_id=order.id, "
-	                		+ "JOIN order_item on items.id = order_item.fk_item_id WHERE fk_order_id = ?");) {
+	                PreparedStatement statement = connection.prepareStatement("SELECT orders.id, customers.first_name, customers.surname,"
+	                		+ " items.name FROM orders JOIN customers on orders.fk_customer_id=customers.id"
+	                		+ " JOIN order_item on orders.id = order_item.fk_order_id"
+	                		+ " JOIN items on order_item.fk_item_id = items.id;");) {
 	            statement.setLong(1, id);
 	            ResultSet resultSet = statement.executeQuery();
 	            resultSet.next();
@@ -63,29 +66,25 @@ public class OrderDao implements IDomainDao<Order> {
 
 	    @Override
 	    public List<Order> readAll() {
-	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	    	List<Order> orders = new ArrayList<>();
+	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();
-	                ResultSet resultSet = statement.executeQuery("SELECT orders.id as order_id, first_name.customers, surname.customers,"
-	                		+ " name.item FROM orders, JOIN orders on order_item.fk_order_id=order.id,"
-	                		+ " JOIN order_item on items.id = order_item.fk_item_id;");) {
-	            List<Order> orders = new ArrayList<>();
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders");) {
+	            
 	            while (resultSet.next()) {
 	                orders.add(modelFromResultSet(resultSet));
 	            }
-	            return orders;
 	        } catch (SQLException e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
 	        }
-	        return new ArrayList<>();
+	       return orders;
 	    }
 
 	    public Order readLatest() {
-	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();
-	                ResultSet resultSet = statement.executeQuery("SELECT orders.id as order_id, first_name.customers, surname.customers,"
-	                		+ " name.item FROM orders," + " JOIN orders on order_item.fk_order_id=order.id,"
-	                		+ " JOIN order_item on items.id = order_item.fk_item_id ORDER BY id DESC LIMIT 1");) {
+	                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY id DESC LIMIT 1");) {
 	            resultSet.next();
 	            return modelFromResultSet(resultSet);
 	        } catch (Exception e) {
@@ -94,22 +93,22 @@ public class OrderDao implements IDomainDao<Order> {
 	        }
 	        return null;
 	    }
-    
+	    
 	    public List<Item> getItems(Long id) {
-		    try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	    	List<Long> grabId = new ArrayList<>();
+			List<Item> grabItem = new ArrayList<>();
+	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                PreparedStatement statement = connection
-	                        .prepareStatement("SELECT order_item.fk_item_id, items.name, items.price FROM orders_items "
-	                        		+ "JOIN order_items oi ON items.id = oi.fk_item_id WHERE oi.fk_item_id=?;")){
-		    	List<Item> grabItems= new ArrayList<>();
-	            statement.setLong(1, id);
+	                        .prepareStatement("SELECT * FROM order_item WHERE fk_order_id = " + id);) {
 	            ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
-	            	Long i = resultSet.getLong("fk_item_id");
-	            	String name= resultSet.getString("name");
-	            	Double price=resultSet.getDouble("price");
-	            	grabItems.add(new Item(i, name, price));
+	            	Long itemId = resultSet.getLong("fk_item_id");
+	            	grabId.add(itemId);
 	            }
-	            return grabItems;
+	            for(Long i : grabId) {
+	            	grabItem.add(itemDao.read(i));
+	            return grabItem;
+	            }
 	        } catch (Exception e) {
 	        	LOGGER.debug(e);
 	        	LOGGER.error(e.getMessage());
@@ -120,7 +119,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order addItems(Long orderId, Long itemId) {
 	    	   try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                PreparedStatement statement = connection
-		                        .prepareStatement("INSERT INTO orders_item (fk_order_id, fk_item_id) VALUE (?)");) {
+		                        .prepareStatement("INSERT INTO order_item (fk_order_id, fk_item_id) VALUE (?,?)");) {
 		        	statement.setLong(1, orderId);
 		        	statement.setLong(2, itemId);
 		            statement.executeUpdate(); 
@@ -141,7 +140,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public int delete(long id) { //delete an entire order
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();) {
-	            return statement.executeUpdate("DELETE FROM orders where id = " + id + ", delete from order_items where fk_order_id = " + id);
+	            return statement.executeUpdate("DELETE orders, order_item JOIN order_item ON order_item.fk_order_id = orders.id WHERE order.id = " + id);
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
@@ -151,7 +150,7 @@ public class OrderDao implements IDomainDao<Order> {
 	     public Order deleteItem(long id, long orderId) { //delete an item from an order
 		      try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		              Statement statement = connection.createStatement();) {
-		         statement.executeUpdate("DELETE FROM orders_items where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
+		         statement.executeUpdate("DELETE FROM order_item where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
@@ -162,8 +161,9 @@ public class OrderDao implements IDomainDao<Order> {
 	    public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 	        Long id = resultSet.getLong("id");
 	        Customer customer = customerDao.read(resultSet.getLong("fk_customer_id")); //init customerId
-	        List<Item> item = getItems(resultSet.getLong("id"));//need to make a get items only from order method
-	        return new Order(id, customer, item);
+	        List<Item> item = getItems(id);//need to make a get items only from order method
+	        double value = resultSet.getDouble("value");
+	        return new Order(id, customer, item, value);
 	    }
 
 	    public double sumOrder(long orderId) {
