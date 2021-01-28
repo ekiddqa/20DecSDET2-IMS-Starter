@@ -142,18 +142,14 @@ public class OrderDao implements IDomainDao<Order> {
 	        } return 0;
 	    }
 	        
-	     public Order deleteItem(long id, long orderId) { //delete an item from an order
-		     String sql =  "DELETE FROM order_item WHERE fk_order_id = ? AND fk_item_id = ?";
-	    	 try(Connection connection = DatabaseUtilities.getInstance().getConnection();
-		                PreparedStatement statementRemove = connection
-		                        .prepareStatement(sql);) {
-	    		      statementRemove.setLong(1, orderId);
-	    		      statementRemove.setLong(2, id);
-		              statementRemove.executeUpdate(); 
+	     public int deleteItem(long id, long orderId) { //delete an item from an order
+		     try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+		                Statement statement = connection.createStatement();) {
+		            return statement.executeUpdate("DELETE FROM order_item WHERE fk_order_id = " + orderId + " AND fk_item_id ");
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
-		     } return read(orderId);
+		     } return 0;
 	    }
 
 	    @Override

@@ -73,7 +73,7 @@ public class OrderController implements ICrudController<Order> {
 		Order nullOrder = null;  
 		LOGGER.info("Please enter the id of the order you would like to update");
 	        Long id = javaUtilities.getLong();
-	        LOGGER.info("Would you like to add or remove an item?");
+	        LOGGER.info("Would you like to add or remove an item? (exit to Quit)");
 	        String input = javaUtilities.getString().toLowerCase();
 	        if(input.equals("add")) {
 	        	LOGGER.info("Enter ID of item to add to order.");
@@ -82,7 +82,9 @@ public class OrderController implements ICrudController<Order> {
 	        } else if(input.equals("remove")) {
 	            LOGGER.info("Enter ID of item to remove from order.");
 	            Long toRemove = javaUtilities.getLong();
-	            nullOrder = this.orderDao.deleteItem(id, toRemove);
+	            orderDao.deleteItem(id, toRemove);
+	        } else if(input.equals("exit")) {
+	        	return null;
 	        }	else {
 	        	LOGGER.info("Invalid input. Only \"add\" or \"remove\" are accepted.");
 	        }
