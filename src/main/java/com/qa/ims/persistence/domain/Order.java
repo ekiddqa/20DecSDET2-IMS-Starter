@@ -86,7 +86,7 @@ public class Order {
 		if(this.items.isEmpty()) {
 			order.append("\n No items found in this order.");
 		} else {
-			order.append(String.format(" value = £%.2f", this.value));
+			order.append(String.format(" value = £%.2f", calculateValue()));
 			this.items.forEach(item -> {
 				order.append("\n -> ");
 				order.append(String.format("%s: £%.2f", item.getName(), item.getPrice()));
@@ -136,5 +136,10 @@ public class Order {
 			return false;
 		return true;
 	}
-	
+
+	public double calculateValue() {
+		for(Item i : items) {
+			value += i.getPrice();
+		} return value;
+	}
 }

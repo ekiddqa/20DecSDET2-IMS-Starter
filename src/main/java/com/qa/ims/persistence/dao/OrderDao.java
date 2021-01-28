@@ -22,10 +22,6 @@ public class OrderDao implements IDomainDao<Order> {
 	    private CustomerDao customerDao;
 	    private ItemDao itemDao;
 	    
-	    public OrderDao() {
-	    	super();
-	    }
-	    
 	    public OrderDao(ItemDao itemDao, CustomerDao customerDao) {
 	    	super();
 	    	this.itemDao = itemDao;
@@ -67,32 +63,32 @@ public class OrderDao implements IDomainDao<Order> {
 	    @Override
 	    public List<Order> readAll() {
 	    	List<Order> orders = new ArrayList<>();
-	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();
 	                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders");) {
-	            
 	            while (resultSet.next()) {
 	                orders.add(modelFromResultSet(resultSet));
 	            }
+	            return orders;
 	        } catch (SQLException e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
 	        }
-	       return orders;
+	        return orders;
 	    }
-
+	    
 	    public Order readLatest() {
-	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	                Statement statement = connection.createStatement();
-	                ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY id DESC LIMIT 1");) {
-	            resultSet.next();
-	            return modelFromResultSet(resultSet);
-	        } catch (Exception e) {
-	            LOGGER.debug(e);
-	            LOGGER.error(e.getMessage());
-	        }
-	        return null;
-	    }
+	    	  try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	                  Statement statement = connection.createStatement();
+	                  ResultSet resultSet = statement.executeQuery("SELECT * FROM orders ORDER BY id DESC LIMIT 1");) {
+	              resultSet.next();
+	              return modelFromResultSet(resultSet);
+	          } catch (Exception e) {
+	              LOGGER.debug(e);
+	              LOGGER.error(e.getMessage());
+	          }
+	          return null;
+	      }
 	    
 	    public List<Item> getItems(Long id) {
 	    	List<Long> grabId = new ArrayList<>();
@@ -107,13 +103,12 @@ public class OrderDao implements IDomainDao<Order> {
 	            }
 	            for(Long i : grabId) {
 	            	grabItem.add(itemDao.read(i));
-	            return grabItem;
-	            }
+	            } 
 	        } catch (Exception e) {
 	        	LOGGER.debug(e);
 	        	LOGGER.error(e.getMessage());
 	        }
-	        return null;
+	    	return grabItem;
 		}
 	    
 	    public Order addItems(Long orderId, Long itemId) {
@@ -140,7 +135,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public int delete(long id) { //delete an entire order
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();) {
-	            return statement.executeUpdate("DELETE orders, order_item JOIN order_item ON order_item.fk_order_id = orders.id WHERE order.id = " + id);
+	            return statement.executeUpdate("DELETE FROM orders WHERE id = " + id);
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
@@ -148,13 +143,17 @@ public class OrderDao implements IDomainDao<Order> {
 	    }
 	        
 	     public Order deleteItem(long id, long orderId) { //delete an item from an order
-		      try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-		              Statement statement = connection.createStatement();) {
-		         statement.executeUpdate("DELETE FROM order_item where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
+		     String sql =  "DELETE FROM order_item WHERE fk_order_id = ? AND fk_item_id = ?";
+	    	 try(Connection connection = DatabaseUtilities.getInstance().getConnection();
+		                PreparedStatement statementRemove = connection
+		                        .prepareStatement(sql);) {
+	    		      statementRemove.setLong(1, orderId);
+	    		      statementRemove.setLong(2, id);
+		              statementRemove.executeUpdate(); 
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
-		     } return read(id);
+		     } return read(orderId);
 	    }
 
 	    @Override
@@ -179,5 +178,16 @@ public class OrderDao implements IDomainDao<Order> {
 	        return 0;
 	    	
 	    }
-	    
+
+	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	       //       Statement statement = connection.createStatement();) {
+	       //  statement.executeUpdate("DELETE FROM order_item where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
+
+	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+              //  PreparedStatement statement = connection
+                        //.prepareStatement("DELETE FROM order_item where fk_item_id = (?) AND  fk_order_id = (?)");) {
+    	     // statement.setLong(1, id);
+    	      //statement.setLong(2, orderId);
+             // statement.executeUpdate(); 
+           // return readLatest();
 }

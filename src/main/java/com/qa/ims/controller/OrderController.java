@@ -18,7 +18,7 @@ public class OrderController implements ICrudController<Order> {
     public static final Logger LOGGER = LogManager.getLogger();
 
     private OrderDao orderDao;
-	CustomerDao customerDao = new CustomerDao();
+	private CustomerDao customerDao = new CustomerDao();
     private JavaUtilities javaUtilities;
     
 
@@ -30,15 +30,15 @@ public class OrderController implements ICrudController<Order> {
 
     @Override
     public List<Order> readAll() {
-        List<Order> orders = orderDao.readAll();
-       if(orders.isEmpty()) {
-    	   LOGGER.info("No orders in IMS.");
-       } 
-       for (Order order : orders) {
-            LOGGER.info(order);
+            List<Order> orders = orderDao.readAll();
+            if(orders.isEmpty()) {
+         	   LOGGER.info("No orders in IMS.");
+            } else {
+    	        for (Order order : orders) {
+                    LOGGER.info(order);
+                }
+            } return orders;
         }
-        return orders;
-    }
     
     @Override 
     public Order create() {
@@ -74,7 +74,7 @@ public class OrderController implements ICrudController<Order> {
 		LOGGER.info("Please enter the id of the order you would like to update");
 	        Long id = javaUtilities.getLong();
 	        LOGGER.info("Would you like to add or remove an item?");
-	        String input = javaUtilities.getString();
+	        String input = javaUtilities.getString().toLowerCase();
 	        if(input.equals("add")) {
 	        	LOGGER.info("Enter ID of item to add to order.");
 	        	Long toAdd = javaUtilities.getLong();
