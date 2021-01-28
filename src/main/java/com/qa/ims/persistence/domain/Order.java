@@ -1,38 +1,58 @@
 package com.qa.ims.persistence.domain;
 
 import java.util.List;
-import java.util.stream.Stream;
-
-
 
 public class Order {
 
 	private Long id;
 	private Customer customer;
-	private double value;
 	private List<Item> items;
-	private Stream<Item> itemIteration = items.stream();
-	
+	private double value;
+
+	double getValue() {
+		return value;
+	}
+
+	void setValue(double value) {
+		this.value = value;
+	}
+
+	public Order(Long id, Customer customer, List<Item> items, double value) {
+		super();
+		this.id = id;
+		this.customer = customer;
+		this.items = items;
+		this.value = value;
+	}
+
+	public Order(Long id, Customer customer, List<Item> items) {
+		super();
+		this.id = id;
+		this.customer = customer;
+		this.items = items;
+	}
+
 	public Order(Customer customer, List<Item> items) {
 		this.setCustomer(customer);
 		this.setItems(items);
 	}
-    
-	public Order(Long id, Customer customer, List<Item> items) {
-		this.setId(id);
-		this.setCustomer(customer);
-		this.setItems(items);
-	}
-	
-	public Order(Customer customer, double value) {
-		this.customer = customer;
-		this.value = value;
-	}
-	
+
 	public Order(Customer customer) {
 		this.setCustomer(customer);
 	}
 
+	public Order(Long id, Customer customer, double value) {
+		super();
+		this.id = id;
+		this.customer = customer;
+		this.value = value;
+	}
+	
+	public Order(Customer customer, double value) {
+		super();
+		this.customer = customer;
+		this.value = value;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -57,13 +77,6 @@ public class Order {
 		this.items = items;
 	}
 	
-	public Stream<Item> getItemIteration() {
-		return itemIteration;
-	}
-
-	public void setItemIteration(Stream<Item> itemIteration) {
-		this.itemIteration = itemIteration;
-	}
 
 	@Override
 	public String toString() {
@@ -89,6 +102,9 @@ public class Order {
 		result = prime * result + ((customer == null) ? 0 : customer.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((items == null) ? 0 : items.hashCode());
+		long temp;
+		temp = Double.doubleToLongBits(value);
+		result = prime * result + (int) (temp ^ (temp >>> 32));
 		return result;
 	}
 
@@ -101,10 +117,10 @@ public class Order {
 		if (getClass() != obj.getClass())
 			return false;
 		Order other = (Order) obj;
-		if (getCustomer() == null) {
-			if (other.getCustomer() != null)
+		if (customer == null) {
+			if (other.customer != null)
 				return false;
-		} else if (!getCustomer().equals(other.getCustomer()))
+		} else if (!customer.equals(other.customer))
 			return false;
 		if (id == null) {
 			if (other.id != null)
@@ -116,17 +132,9 @@ public class Order {
 				return false;
 		} else if (!items.equals(other.items))
 			return false;
+		if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value))
+			return false;
 		return true;
-	}
-	
-	public double sumValue() {
-		this.itemIteration.forEach(item -> 
-		    value += item.getPrice());
-		return value;
-	}
-	
-	public Long getCustomerId(Customer customer) {
-		return customer.getId();
 	}
 	
 }

@@ -21,13 +21,14 @@ CREATE TABLE IF NOT EXISTS `ims`.`items` (
 CREATE TABLE IF NOT EXISTS `ims`.`orders` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `fk_customer_id` INT(11) NOT NULL,
+    `value` double,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`fk_customer_id`) REFERENCES `ims`.`customers`(`id`)
+    FOREIGN KEY (`fk_customer_id`) REFERENCES `ims`.`customers`(`id`) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS `ims`.`order_item` (
     `fk_order_id` INT(11) NOT NULL,
     `fk_item_id` INT(11) NOT NULL,
-    FOREIGN KEY (`fk_order_id`) REFERENCES `ims`.`orders`(`id`),
-    FOREIGN KEY (`fk_item_id`) REFERENCES `ims`.`items`(`id`)
+    FOREIGN KEY (`fk_order_id`) REFERENCES `ims`.`orders`(`id`) ON DELETE CASCADE,
+    FOREIGN KEY (`fk_item_id`) REFERENCES `ims`.`items`(`id`) ON DELETE CASCADE
 );

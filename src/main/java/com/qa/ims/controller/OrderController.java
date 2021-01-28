@@ -8,9 +8,11 @@ import org.apache.logging.log4j.Logger;
 import com.qa.ims.persistence.dao.CustomerDao;
 import com.qa.ims.persistence.dao.OrderDao;
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
 import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.JavaUtilities;
 
+@SuppressWarnings("unused")
 public class OrderController implements ICrudController<Order> {
 
     public static final Logger LOGGER = LogManager.getLogger();
@@ -38,36 +40,14 @@ public class OrderController implements ICrudController<Order> {
         return orders;
     }
     
- 
-	/*
-	 * @Override public Order create() { boolean addMore = true;
-	 * LOGGER.info("Please enter a customer ID"); try { String c =
-	 * javaUtilities.getString(); Long customerId = Long.parseLong(c); Customer
-	 * customer = customerId. List<Item> itemList = new ArrayList<Item>();
-	 * //seperate method for creating an empty order and other for adding items to
-	 * it do { LOGGER.info("Please enter item ID. Enter 0 to exit."); String i =
-	 * javaUtilities.getString(); if(i != "0") { Long itemId = Long.parseLong(i);
-	 * itemList.add(itemId); } addMore = false; } while(addMore); Order order =
-	 * orderDao.create(new Order(customer, itemList)); LOGGER.info("order created");
-	 * return order; } catch(Exception e) { LOGGER.
-	 * info("Invalid entry, customer and product ID must be positive integers."); }
-	 * return null; }
-	 */
- 	    
-    @Override
-    
+    @Override 
     public Order create() {
     	LOGGER.info("Please enter a customer ID."); //
-    	//try {
     		Long customerId = javaUtilities.getLong();
     		Order order = orderDao.create(new Order(new Customer(customerId, null, null), 0.0));
    	        return order; 
-			/*
-			 * } catch (Exception e) { LOGGER.info("Invalid input."); return null; }
-			 */
     }
    
-    
     public Object read() {
     	LOGGER.info("Would you like to: 1) View all orders 2) Calculate the value of an order? \n Enter the number of your choice. All other input exits menu.");
     	Long input = javaUtilities.getLong();
@@ -76,21 +56,22 @@ public class OrderController implements ICrudController<Order> {
     		for (Order order: orders) {
     			LOGGER.info(order);	
     		} return orders;
-    	} else if(input == 2) {
-    		LOGGER.info("Enter ID of the order whose total you wish to calculate.");
-    		Long id = javaUtilities.getLong();
-    		return sumOrder(id);
-    	} else {
+			} else if(input == 2) {
+			 LOGGER.info("Enter ID of the order whose total you wish to calculate."); 
+			 Long id = javaUtilities.getLong();
+			 double orderValue = orderDao.sumOrder(id);
+			 return orderValue;
+			} else {
     		LOGGER.info("Leaving read orders.");
     	}
+		return null;
     	
     }
+
 	@Override
-	public Order update() { //updated order as null
-		//ask for order id
-		//add or remove - conditional (if/elif(/else - invalid selection))
+	public Order update() {
 		Order nullOrder = null;  
-		LOGGER.info("Please enter the id of the order you would like to update"); //add/remove item functionality here
+		LOGGER.info("Please enter the id of the order you would like to update");
 	        Long id = javaUtilities.getLong();
 	        LOGGER.info("Would you like to add or remove an item?");
 	        String input = javaUtilities.getString();
@@ -116,8 +97,4 @@ public class OrderController implements ICrudController<Order> {
         return orderDao.delete(id);
 	}
 	
-	public double sumOrder(Long orderId) {
-	
-	}
-	//sum an order
 }

@@ -62,7 +62,7 @@ public class ItemController implements ICrudController<Item> {
 		public Item update() {
 			  LOGGER.info("Please enter the id of the item you would like to update");
 		        Long id = javaUtilities.getLong();
-		        LOGGER.info("Please enter a first name");
+		        LOGGER.info("Please enter a name");
 		        String name = javaUtilities.getString();
 		        LOGGER.info("Please enter a price");
 		        String p = javaUtilities.getString();
