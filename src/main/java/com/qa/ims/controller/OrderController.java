@@ -58,16 +58,33 @@ public class OrderController implements ICrudController<Order> {
     
     public Order create() {
     	LOGGER.info("Please enter a customer ID."); //
-    	try {
+    	//try {
     		Long customerId = javaUtilities.getLong();
     		Order order = orderDao.create(new Order(new Customer(customerId, null, null), 0.0));
    	        return order; 
-    	} catch (Exception e) {
-    		LOGGER.info("Invalid input.");
-    		return null;
-    	}
+			/*
+			 * } catch (Exception e) { LOGGER.info("Invalid input."); return null; }
+			 */
     }
+   
     
+    public Object read() {
+    	LOGGER.info("Would you like to: 1) View all orders 2) Calculate the value of an order? \n Enter the number of your choice. All other input exits menu.");
+    	Long input = javaUtilities.getLong();
+    	if(input == 1) {
+    		List<Order> orders = orderDao.readAll();
+    		for (Order order: orders) {
+    			LOGGER.info(order);	
+    		} return orders;
+    	} else if(input == 2) {
+    		LOGGER.info("Enter ID of the order whose total you wish to calculate.");
+    		Long id = javaUtilities.getLong();
+    		return sumOrder(id);
+    	} else {
+    		LOGGER.info("Leaving read orders.");
+    	}
+    	
+    }
 	@Override
 	public Order update() { //updated order as null
 		//ask for order id
@@ -94,11 +111,13 @@ public class OrderController implements ICrudController<Order> {
 
 	@Override
 	public int delete() {
-		LOGGER.info("Please enter the id of the item you would like to delete");
+		LOGGER.info("Please enter the id of the order you would like to delete");
         Long id = javaUtilities.getLong();
         return orderDao.delete(id);
 	}
-    //delete an order
-	//delete an item
+	
+	public double sumOrder(Long orderId) {
+	
+	}
 	//sum an order
 }
