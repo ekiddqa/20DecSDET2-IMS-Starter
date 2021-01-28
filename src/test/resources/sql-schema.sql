@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `items` (
 );
 
 
-CREATE TABLE IF NOT EXISTS `test`.`orders` (
+CREATE TABLE IF NOT EXISTS `orders` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `fk_customer_id` INT(11) NOT NULL,
     PRIMARY KEY (`id`),
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS `test`.`orders` (
 );
 
 
-CREATE TABLE IF NOT EXISTS `test`.`order_item` (
+CREATE TABLE IF NOT EXISTS `order_item` (
     `fk_order_id` INT(11) NOT NULL,
     `fk_item_id` INT(11) NOT NULL,
     FOREIGN KEY (`fk_order_id`) REFERENCES `orders`(`id`),

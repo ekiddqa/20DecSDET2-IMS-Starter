@@ -141,7 +141,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    public int delete(long id) { //delete an entire order
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                Statement statement = connection.createStatement();) {
-	            return statement.executeUpdate("delete from orders where id = " + id + ", delete from order_items where fk_order_id = " + id);
+	            return statement.executeUpdate("DELETE FROM orders where id = " + id + ", delete from order_items where fk_order_id = " + id);
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
@@ -166,4 +166,18 @@ public class OrderDao implements IDomainDao<Order> {
 	        return new Order(id, customer, item);
 	    }
 
+	    public double sumOrder(long orderId) {
+	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+            Statement statement = connection.createStatement();) {
+       return statement.executeUpdate("SELECT SUM(price) FROM items WHERE item.id =("
+       		+ " SELECT fk_items_id FROM order_item WHERE fk_order_id = " + orderId
+       		+ " );");
+	    	} catch (Exception e) {
+	            LOGGER.debug(e);
+	            LOGGER.error(e.getMessage());
+	        }
+	        return 0;
+	    	
+	    }
+	    
 }

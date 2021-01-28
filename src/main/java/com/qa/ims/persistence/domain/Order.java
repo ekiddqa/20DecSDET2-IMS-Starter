@@ -7,11 +7,11 @@ import java.util.stream.Stream;
 
 public class Order {
 
-	Long id;
-	Customer customer;
-	Double value;
-	List<Item> items;
-	Stream<Item> itemIteration = items.stream();
+	private Long id;
+	private Customer customer;
+	private double value;
+	private List<Item> items;
+	private Stream<Item> itemIteration = items.stream();
 	
 	public Order(Customer customer, List<Item> items) {
 		this.setCustomer(customer);
@@ -24,7 +24,7 @@ public class Order {
 		this.setItems(items);
 	}
 	
-	public Order(Customer customer, Double value) {
+	public Order(Customer customer, double value) {
 		this.customer = customer;
 		this.value = value;
 	}
