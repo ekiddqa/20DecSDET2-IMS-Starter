@@ -143,9 +143,9 @@ public class OrderDao implements IDomainDao<Order> {
 	    }
 	        
 	     public int deleteItem(long id, long orderId) { //delete an item from an order
-		     try (Connection connection = DatabaseUtilities.getInstance().getConnection();
+	    	 try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                Statement statement = connection.createStatement();) {
-		            return statement.executeUpdate("DELETE FROM order_item WHERE fk_order_id = " + orderId + " AND fk_item_id ");
+		           return statement.executeUpdate("DELETE FROM order_item WHERE fk_item_id = " + id + " AND fk_order_id = " + orderId);
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
