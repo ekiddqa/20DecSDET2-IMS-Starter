@@ -52,7 +52,7 @@ This will take you to the shortcut location. Right click on "Command Prompt" (or
 
 Go to the "Shortcut" tab and then to "Advanced button".
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804550692215062558/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804550692215062558/unknown.png)
 
 You should see the option to "Run as administrator". Check this box if it's not already. Click "OK" then "Apply" to make the changes go into effect.
 
@@ -63,18 +63,18 @@ A quick way to open command line is "Ctrl + r" and then type in "cmd".
 ### Running the Program
 Open your command line. Change the directory to where ever you have the program saved. To change directory use "cd " followed by the directory of the program.
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804552261233672192/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804552261233672192/unknown.png)
 
 From here you will need to locate the jar file. By default this is in "\target"
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804552957923819580/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804552957923819580/unknown.png)
 
 You'll need to execute the following command:  
 ```
 java -jar ims-0.0.1-jar-with-dependencies.jar
 ```
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804724401283006464/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804724401283006464/unknown.png)
 
 If everything has gone as intended you should be welcomed by the start menu. The IMS will also create the needed databases in your MySQL.
 
@@ -144,5 +144,3 @@ This project is licensed under the MIT license - see the [LICENSE.md](LICENSE.md
 * Pawel Stypulkowski
 * Everyone at Team Serpent
 * Melike 
-* Inspiration
-* etc
