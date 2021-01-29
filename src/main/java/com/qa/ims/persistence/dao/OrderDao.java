@@ -161,29 +161,4 @@ public class OrderDao implements IDomainDao<Order> {
 	        return new Order(id, customer, item, value);
 	    }
 
-	    public double sumOrder(long orderId) {
-	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-            Statement statement = connection.createStatement();) {
-       return statement.executeUpdate("SELECT SUM(price) FROM items WHERE item.id =("
-       		+ " SELECT fk_items_id FROM order_item WHERE fk_order_id = " + orderId
-       		+ " );");
-	    	} catch (Exception e) {
-	            LOGGER.debug(e);
-	            LOGGER.error(e.getMessage());
-	        }
-	        return 0;
-	    	
-	    }
-
-	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	       //       Statement statement = connection.createStatement();) {
-	       //  statement.executeUpdate("DELETE FROM order_item where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
-
-	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-              //  PreparedStatement statement = connection
-                        //.prepareStatement("DELETE FROM order_item where fk_item_id = (?) AND  fk_order_id = (?)");) {
-    	     // statement.setLong(1, id);
-    	      //statement.setLong(2, orderId);
-             // statement.executeUpdate(); 
-           // return readLatest();
 }
