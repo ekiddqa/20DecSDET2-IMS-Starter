@@ -72,7 +72,25 @@ public class OrderDAOTest {
     }
 
     @Test
-    public void testDelete() {
+    public void testDelete() { // this deletes the entire order, rather than emptying the order or otherwise touching items in an order but leaving the order in tact.
         assertEquals(1, DAO.delete(1));
+    }
+    
+    @Test
+    public void testAddItems() {
+    	testOrder
+    }
+    
+    @Test
+    public void testDeleteItems() {
+    	
+    }
+    
+    @Test
+    public void testGetItems() {
+    	List<Item> stuff = new ArrayList<>();
+    	stuff.add(new Item(1L, "jordan", 50));
+    	System.out.println(stuff.toString());
+    	assertEquals(stuff, DAO.getItems(testOrderStuff.getId()));
     }
 }
