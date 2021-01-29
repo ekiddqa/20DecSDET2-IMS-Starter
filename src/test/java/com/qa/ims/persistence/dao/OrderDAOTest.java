@@ -36,7 +36,7 @@ public class OrderDAOTest {
     Item junk = new Item(1L, "jordan", 50);
     pile.add(junk);
     final Customer customer = new Customer(1L, "jordan", "harrison");
-    testOrder = new Order(2L, customer, pileEmpty);
+    testOrder = new Order(2L, customer, pileEmpty, 0.0);
     testOrderStuff = new Order(1L, customer, pile, 0.0);
 
 	}
@@ -60,15 +60,14 @@ public class OrderDAOTest {
 
     @Test
     public void testRead() {
-    	final Long ID = 2L;
-        assertEquals(testOrder, DAO.read(ID));
+        assertEquals(testOrderStuff, DAO.read(1L));
     }
 
     @Test
-    public void testUpdate() {
+    public void testUpdate() { //update for DAO always produces null as this became an add/remove items method in controller
     	final List<Item> junk = new ArrayList<>();
         final Order updated = new Order(1L, new Customer(1L, "jordan", "harrsion"), junk, 0.0);
-        assertEquals(updated, DAO.update(updated));
+        assertEquals(null, DAO.update(updated));
 
     }
 
