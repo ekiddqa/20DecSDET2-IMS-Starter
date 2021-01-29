@@ -11,7 +11,6 @@ import com.qa.ims.utils.JavaUtilities;
 
 
 public class ItemController implements ICrudController<Item> {
-	//yelling because CRUD methods aren't final since they need to convert to doubles
 
 	    public static final Logger LOGGER = LogManager.getLogger();
 
@@ -63,7 +62,7 @@ public class ItemController implements ICrudController<Item> {
 		public Item update() {
 			  LOGGER.info("Please enter the id of the item you would like to update");
 		        Long id = javaUtilities.getLong();
-		        LOGGER.info("Please enter a first name");
+		        LOGGER.info("Please enter a name");
 		        String name = javaUtilities.getString();
 		        LOGGER.info("Please enter a price");
 		        String p = javaUtilities.getString();

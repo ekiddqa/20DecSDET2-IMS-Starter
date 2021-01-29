@@ -9,13 +9,21 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.qa.ims.persistence.domain.Customer;
+import com.qa.ims.persistence.domain.Item;
+import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DatabaseUtilities;
 
-public class CustomerDAOTest {
+public class OrderDAOTest {
 
-    private final CustomerDao DAO = new CustomerDao();
+    final CustomerDao CDAO = new CustomerDao();
+    final ItemDao IDAO = new ItemDao();
+    final OrderDao DAO = new OrderDao(IDAO, CDAO);
+    final Customer cust = new Customer(1L,"jordan", "harrison");
+    final List<Item> stuff = new ArrayList<>();
+    final Order created = new Order(1L,cust,stuff);
 
-    @Before
+    @SuppressWarnings("unused")
+	@Before
     public void setup() {
         DatabaseUtilities.connect();
         DatabaseUtilities.getInstance().init("src/test/resources/sql-schema.sql", "src/test/resources/sql-data.sql");
@@ -23,31 +31,32 @@ public class CustomerDAOTest {
 
     @Test
     public void testCreate() {
-        final Customer created = new Customer(2L, "nick", "johnson"); 
         assertEquals(created, DAO.create(created));
     }
 
     @Test
     public void testReadAll() {
-        List<Customer> expected = new ArrayList<>();
-        expected.add(new Customer(1L, "jordan", "harrison"));
+        List<Order> expected = new ArrayList<>();
+        final Customer nCust = new Customer(1L,"nick", "barba");
+        expected.add(new Order(nCust));
         assertEquals(expected, DAO.readAll());
     }
 
     @Test
     public void testReadLatest() {
-        assertEquals(new Customer(1L, "jordan", "harrison"), DAO.readLatest());
+        assertEquals(new Order(cust), DAO.readLatest());
     }
 
     @Test
     public void testRead() {
     	 final long ID = 1L;
-         assertEquals(new Customer(ID, "jordan", "harrison"), DAO.read(ID));
+         assertEquals(new Order(ID, cust), DAO.read(ID));
     }
 
     @Test
     public void testUpdate() {
-        final Customer updated = new Customer(1L, "nick", "johnson");
+    	final Customer nCust = new Customer(1L, "nick", "johnson");
+        final Order updated = new Order(1L, nCust);
         assertEquals(updated, DAO.update(updated));
 
     }
