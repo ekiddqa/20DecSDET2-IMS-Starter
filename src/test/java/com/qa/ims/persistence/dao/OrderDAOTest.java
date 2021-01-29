@@ -78,12 +78,13 @@ public class OrderDAOTest {
     
     @Test
     public void testAddItems() {
-    	testOrder
+    DAO.addItems(1L, 1L);
+
     }
     
     @Test
     public void testDeleteItems() {
-    	
+    	DAO.deleteItem(1L, 1L);
     }
     
     @Test
