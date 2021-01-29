@@ -119,6 +119,7 @@ To change the database location in terms of server go to "db.properties" and cha
 
 ## Project Board
 * [Jira](https://ekiddqa.atlassian.net/secure/BrowseProjects.jspa) - Used for Agile Scrum sprint management
+* Dashboard for this project [here](https://ekiddqa.atlassian.net/jira/software/c/projects/IQP/boards/2/roadmap)
 
 ## Versioning
 
