@@ -23,7 +23,6 @@ public class OrderDAOTest {
 	private Order testOrder;
     private Item junk;
     private List<Item> pile;
-    private Customer customer;
 	
 	@Before
 	public void setup() {
@@ -54,8 +53,7 @@ public class OrderDAOTest {
     
     @Test
     public void testReadLatest() {
-    	Order testOrder1 = new Order(1L, customer, pile, 0.0);
-        assertEquals(testOrder1, DAO.readLatest());
+        assertEquals(testOrder, DAO.readLatest());
     }
 
     @Test
