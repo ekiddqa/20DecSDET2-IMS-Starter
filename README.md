@@ -29,7 +29,7 @@ the IMS as it is thus no installation should be required.
 
 This program must be executed from the command line. I would run the command line as an admin. This can be done in one of two ways. Skip to **"Running the Program"** to skip running command line instructions.
 
-##1. One off instances
+## 1. One off instances
 This won't change default settings. Go to your search field in your OS.
 <details>
 <summary>"Expand image"</summary>
@@ -50,7 +50,7 @@ Right click on the command prompt (or whatever your version of Windows calls the
 
 End with an example of getting some data out of the system or using it for a little demo
 
-##2. Run command line as admin for all instances.
+## 2. Run command line as admin for all instances.
 Everytime you run command line it'll be ran as an admin with the benefits that entails. Follow the previous method up to right the right click. Instead of clicking "Run as administrator",
 click on "open file location"
 <details>
@@ -74,7 +74,7 @@ https://cdn.discordapp.com/attachments/761214563660070922/804551313370906664/unk
 </details>
 A quick way to open command line is "Ctrl + r" and then type in "cmd".
 
-###Running the Program
+### Running the Program
 Open your command line. Change the directory to where ever you have the program saved. To change directory use "cd " followed by the directory of the program.
 <details>
 <summary>"Expand image"</summary>
@@ -114,7 +114,7 @@ of checked when the correct input is entered the proper changes in the system we
 The test above creates an new arrayList that only holds elements that belong to the class "Item". It then adds a new element to the table. The assertEquals statement checks to see whether the left and the
 right sides of the second comma match. If they do the test is successful, otherwise the test fails.
 
-##Performing the prewritten tests
+## Performing the prewritten tests
 To run the tests yourself you'll need to have Maven installed. From there you'll need to open command line and change directory to where the folder is stored (see Installing). From there run
 ```
 mvn clean package
