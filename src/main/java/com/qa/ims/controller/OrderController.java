@@ -48,6 +48,27 @@ public class OrderController implements ICrudController<Order> {
    	        return order; 
     }
    
+    public Object read() {
+    	LOGGER.info("Would you like to: 1) View all orders 2) Calculate the value of an order? \n Enter the number of your choice. All other input exits menu.");
+    	Long input = javaUtilities.getLong();
+    	if(input == 1) {
+    		List<Order> orders = orderDao.readAll();
+    		for (Order order: orders) {
+    			LOGGER.info(order);	
+    		} return orders;
+			} else if(input == 2) {
+			 LOGGER.info("Enter ID of the order whose total you wish to calculate."); 
+			 Long id = javaUtilities.getLong();
+			 double orderValue = orderDao.sumOrder(id);
+			 return orderValue;
+			} else {
+    		LOGGER.info("Leaving read orders.");
+    	}
+		return null;
+    	
+    }
+
+
 	@Override
 	public Order update() {
 		Order nullOrder = null;  

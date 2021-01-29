@@ -1,7 +1,5 @@
 package com.qa.ims.persistence.dao;
 
-
-
 import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
@@ -16,7 +14,7 @@ import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DatabaseUtilities;
 
 public class OrderDAOTest {
-	
+
 	private final CustomerDao cDAO = new CustomerDao();
 	private final ItemDao iDAO = new ItemDao();
 	private final OrderDao DAO = new OrderDao(iDAO, cDAO);
@@ -68,6 +66,7 @@ public class OrderDAOTest {
     	final List<Item> junk = new ArrayList<>();
         final Order updated = new Order(1L, new Customer(1L, "jordan", "harrsion"), junk, 0.0);
         assertEquals(null, DAO.update(updated));
+
 
     }
 
