@@ -45,12 +45,9 @@ public class OrderDao implements IDomainDao<Order> {
 
 	    public Order read(Long id) {
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	                PreparedStatement statement = connection.prepareStatement("SELECT orders.id, customers.first_name, customers.surname,"
-	                		+ " items.name FROM orders JOIN customers on orders.fk_customer_id=customers.id"
-	                		+ " JOIN order_item on orders.id = order_item.fk_order_id"
-	                		+ " JOIN items on order_item.fk_item_id = items.id;");) {
-	            statement.setLong(1, id);
-	            ResultSet resultSet = statement.executeQuery();
+	                PreparedStatement statement = connection.prepareStatement("SELECT * FROM orders WHERE id = ?");) {
+	        	statement.setLong(1, id);
+	        	ResultSet resultSet = statement.executeQuery();
 	            resultSet.next();
 	            return modelFromResultSet(resultSet);
 	        } catch (Exception e) {
@@ -142,7 +139,9 @@ public class OrderDao implements IDomainDao<Order> {
 	        } return 0;
 	    }
 	        
-	     public int deleteItem(long id, long orderId) { //delete an item from an order
+
+	     public int deleteItem(long id, long orderId) { //delete an item from an order - note the item and order ID order is different to add
+	    	 //don't have time to fix now
 	    	 try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                Statement statement = connection.createStatement();) {
 		           return statement.executeUpdate("DELETE FROM order_item WHERE fk_item_id = " + id + " AND fk_order_id = " + orderId);
@@ -175,15 +174,4 @@ public class OrderDao implements IDomainDao<Order> {
 	    	
 	    }
 
-	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	       //       Statement statement = connection.createStatement();) {
-	       //  statement.executeUpdate("DELETE FROM order_item where fk_item_id = " + id + " AND  fk_order_id = " + orderId);
-
-	    //try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-              //  PreparedStatement statement = connection
-                        //.prepareStatement("DELETE FROM order_item where fk_item_id = (?) AND  fk_order_id = (?)");) {
-    	     // statement.setLong(1, id);
-    	      //statement.setLong(2, orderId);
-             // statement.executeUpdate(); 
-           // return readLatest();
 }

@@ -1,7 +1,7 @@
-DROP TABLE `customers`;
-DROP TABLE `items`;
-DROP TABLE `orders`;
 DROP TABLE `order_item`;
+DROP TABLE `orders`;
+DROP TABLE `items`;
+DROP TABLE `customers`;
 
 CREATE TABLE IF NOT EXISTS `customers` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -13,14 +13,14 @@ CREATE TABLE IF NOT EXISTS `customers` (
 CREATE TABLE IF NOT EXISTS `items` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(40) NOT NULL,
-    `price` DEC(11,2) NOT NULL,
+    `price` double,
     PRIMARY KEY (`id`)
 );
 
 CREATE TABLE IF NOT EXISTS `orders` (
     `id` INT(11) NOT NULL AUTO_INCREMENT,
     `fk_customer_id` INT(11) NOT NULL,
-    `value` double DEFAULT 0,
+    `value` double,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`fk_customer_id`) REFERENCES `customers`(`id`) ON DELETE CASCADE
 );
