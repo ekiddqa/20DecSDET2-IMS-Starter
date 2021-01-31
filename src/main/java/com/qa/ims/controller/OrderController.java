@@ -75,7 +75,7 @@ public class OrderController implements ICrudController<Order> {
 	        if(input.equals("add")) {
 	        	LOGGER.info("Enter ID of item to add to order.");
 	        	Long toAdd = javaUtilities.getLong();
-	        	nullOrder = this.orderDao.addItems(id, toAdd);
+	        	nullOrder = this.orderDao.addItem(id, toAdd);
 	        } else if(input.equals("remove")) {
 	            LOGGER.info("Enter ID of item to remove from order.");
 	            Long toRemove = javaUtilities.getLong();

@@ -77,7 +77,7 @@ public class OrderDAOTest {
     
     @Test
     public void testAddItems() {
-    DAO.addItems(1L, 1L);
+    DAO.addItem(1L, 1L);
 
     }
     

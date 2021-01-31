@@ -92,7 +92,8 @@ public class OrderDao implements IDomainDao<Order> {
 			List<Item> grabItem = new ArrayList<>();
 	    	try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 	                PreparedStatement statement = connection
-	                        .prepareStatement("SELECT * FROM order_item WHERE fk_order_id = " + id);) {
+	                        .prepareStatement("SELECT * FROM order_item WHERE fk_order_id = ?");) {
+	    		statement.setLong(1, id);
 	            ResultSet resultSet = statement.executeQuery();
 	            while (resultSet.next()) {
 	            	Long itemId = resultSet.getLong("fk_item_id");
@@ -108,7 +109,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    	return grabItem;
 		}
 	    
-	    public Order addItems(Long orderId, Long itemId) {
+	    public Order addItem(Long orderId, Long itemId) {
 	    	   try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                PreparedStatement statement = connection
 		                        .prepareStatement("INSERT INTO order_item (fk_order_id, fk_item_id) VALUE (?,?)");) {
@@ -124,15 +125,17 @@ public class OrderDao implements IDomainDao<Order> {
 		    }
 	    
 	    @Override
-	    public Order update(Order order) {
+	    public Order update(Order order) { //Leftover from interface as this has been split into addItem and deleteItem
 	        return null;
 	    }
 
 	    @Override
 	    public int delete(long id) { //delete an entire order
 	        try (Connection connection = DatabaseUtilities.getInstance().getConnection();
-	                Statement statement = connection.createStatement();) {
-	            return statement.executeUpdate("DELETE FROM orders WHERE id = " + id);
+	                PreparedStatement statement = connection
+	                        .prepareStatement("DELETE FROM orders WHERE id = ?");) {
+	        	statement.setLong(1, id);
+	        	statement.executeUpdate(); 
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
@@ -140,10 +143,10 @@ public class OrderDao implements IDomainDao<Order> {
 	    }
 	        
 
-	     public int deleteItem(Long orderId, Long id) { //delete an item from an order
+	     public int deleteItem(Long orderId, Long itemId) { //delete an item from an order
 	    	 try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                Statement statement = connection.createStatement();) {
-		           return statement.executeUpdate("DELETE FROM order_item WHERE fk_item_id = " + id + " AND fk_order_id = " + orderId);
+		           return statement.executeUpdate("DELETE FROM order_item WHERE fk_item_id = " + itemId + " AND fk_order_id = " + orderId);
 		     } catch (Exception e) {
 		          LOGGER.debug(e);
 		          LOGGER.error(e.getMessage());
@@ -153,8 +156,8 @@ public class OrderDao implements IDomainDao<Order> {
 	    @Override
 	    public Order modelFromResultSet(ResultSet resultSet) throws SQLException {
 	        Long id = resultSet.getLong("id");
-	        Customer customer = customerDao.read(resultSet.getLong("fk_customer_id")); //init customerId
-	        List<Item> item = getItems(id);//need to make a get items only from order method
+	        Customer customer = customerDao.read(resultSet.getLong("fk_customer_id")); //gets the customerID from the database
+	        List<Item> item = getItems(id); // then gets the Java object customer associated with that ID
 	        double value = resultSet.getDouble("value");
 	        return new Order(id, customer, item, value);
 	    }
