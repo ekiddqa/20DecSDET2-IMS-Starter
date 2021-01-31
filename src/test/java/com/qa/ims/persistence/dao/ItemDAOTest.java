@@ -24,7 +24,7 @@ public class ItemDAOTest {
 	}
 	
     @Test
-    public void createAsNormal() {
+    public void testCreate() {
     	final Item created = new Item(2L, "Alphabet", 22.22);
     	assertEquals("Expected: Inputting typically expected values. Should add an item called \"Alphabet\" with price \"22.22\"to items table.", created, DAO.create(created));
     }
