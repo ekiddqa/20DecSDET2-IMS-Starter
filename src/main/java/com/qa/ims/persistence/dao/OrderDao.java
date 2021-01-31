@@ -140,8 +140,7 @@ public class OrderDao implements IDomainDao<Order> {
 	    }
 	        
 
-	     public int deleteItem(long id, long orderId) { //delete an item from an order - note the item and order ID order is different to add
-	    	 //don't have time to fix now
+	     public int deleteItem(Long orderId, Long id) { //delete an item from an order
 	    	 try (Connection connection = DatabaseUtilities.getInstance().getConnection();
 		                Statement statement = connection.createStatement();) {
 		           return statement.executeUpdate("DELETE FROM order_item WHERE fk_item_id = " + id + " AND fk_order_id = " + orderId);
