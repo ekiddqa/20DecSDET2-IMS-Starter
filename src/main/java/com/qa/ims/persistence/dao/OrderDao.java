@@ -36,6 +36,9 @@ public class OrderDao implements IDomainDao<Order> {
 	        	statementOrder.setLong(1, order.getCustomer().getId());
 	            statementOrder.executeUpdate(); 
 	            return readLatest();
+	        } catch (SQLException sqlE) {
+	        	LOGGER.debug(sqlE);
+	        	LOGGER.info("Customer with that ID does not exist.");
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
@@ -117,6 +120,9 @@ public class OrderDao implements IDomainDao<Order> {
 		        	statement.setLong(2, itemId);
 		            statement.executeUpdate(); 
 		            return readLatest();
+		        } catch (SQLException sqlE) {
+		        	LOGGER.debug(sqlE);
+		        	LOGGER.info("Item with that ID does not exist.");
 		        } catch (Exception e) {
 		            LOGGER.debug(e);
 		            LOGGER.error(e.getMessage());
