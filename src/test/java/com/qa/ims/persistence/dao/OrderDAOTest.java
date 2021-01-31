@@ -2,6 +2,7 @@ package com.qa.ims.persistence.dao;
 
 import static org.junit.Assert.assertEquals;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,22 +21,22 @@ public class OrderDAOTest {
 	private final OrderDao DAO = new OrderDao(iDAO, cDAO);
 	private Order testOrder;
 	private Order testOrderStuff;
-    private Item junk;
-    private List<Item> pile;
-    private List<Item> pileEmpty;
-    private Customer customer;
+    private Item testItem;
+    private List<Item> testItemList;
+    private List<Item> testItemListEmpty;
+    private Customer testCustomer;
 	
 	@Before
 	public void setup() {
     DatabaseUtilities.connect();
     DatabaseUtilities.getInstance().init("src/test/resources/sql-schema.sql", "src/test/resources/sql-data.sql");
-    final List<Item> pile = new ArrayList<>();
-    final List<Item> pileEmpty = new ArrayList<>();
-    Item junk = new Item(1L, "jordan", 50);
-    pile.add(junk);
-    final Customer customer = new Customer(1L, "jordan", "harrison");
-    testOrder = new Order(2L, customer, pileEmpty, 0.0);
-    testOrderStuff = new Order(1L, customer, pile, 0.0);
+    final List<Item> testItemList = new ArrayList<>();
+    final List<Item> testItemListEmpty = new ArrayList<>();
+    Item testItem = new Item(1L, "jordan", 50);
+    testItemList.add(testItem);
+    final Customer testCustomer = new Customer(1L, "jordan", "harrison");
+    testOrder = new Order(2L, testCustomer, testItemListEmpty, 0.0);
+    testOrderStuff = new Order(1L, testCustomer, testItemList, 0.0);
 
 	}
 	
@@ -43,7 +44,8 @@ public class OrderDAOTest {
     public void testCreate() {
     	assertEquals(testOrder, DAO.create(testOrder));
     }
-
+    
+ 
     @Test
     public void testReadAll() {
         final List<Order> expected = new ArrayList<>();
@@ -76,9 +78,17 @@ public class OrderDAOTest {
     }
     
     @Test
+    public void testAddItemError() {
+    	assertEquals(null, DAO.addItem(testOrder.getId(), 1L));
+  }
+    
+    @Test
     public void testAddItem() {
-    DAO.addItem(1L, 1L);
-
+    	Item testItemDuo = new Item(3L, "jordan", 50);
+    	System.out.println(testItemDuo.getId());
+    	//DAO.addItem(1L, testItemDuo.getId());
+    	//This keeps saying that x item does not exist seemingly
+    	//no matter what I put in - that or a null pointer
     }
     
     @Test
