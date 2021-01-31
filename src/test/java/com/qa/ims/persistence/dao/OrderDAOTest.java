@@ -76,14 +76,14 @@ public class OrderDAOTest {
     }
     
     @Test
-    public void testAddItems() {
+    public void testAddItem() {
     DAO.addItem(1L, 1L);
 
     }
     
     @Test
-    public void testDeleteItems() {
-    	DAO.deleteItem(1L, 1L);
+    public void testDeleteItem() {
+    	assertEquals(1, DAO.deleteItem(1L, 1L));
     }
     
     @Test

@@ -141,7 +141,7 @@ public class OrderDao implements IDomainDao<Order> {
 	                PreparedStatement statement = connection
 	                        .prepareStatement("DELETE FROM orders WHERE id = ?");) {
 	        	statement.setLong(1, id);
-	        	statement.executeUpdate(); 
+	        	return statement.executeUpdate(); 
 	        } catch (Exception e) {
 	            LOGGER.debug(e);
 	            LOGGER.error(e.getMessage());
