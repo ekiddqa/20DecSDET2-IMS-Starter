@@ -28,17 +28,12 @@ public class OrderController implements ICrudController<Order> {
         this.javaUtilities = javaUtilities;
     }
 
-    @Override
-    public List<Order> readAll() {
-            List<Order> orders = orderDao.readAll();
-            if(orders.isEmpty()) {
-         	   LOGGER.info("No orders in IMS.");
-            } else {
-    	        for (Order order : orders) {
-                    LOGGER.info(order);
-                }
-            } return orders;
-        }
+	/*
+	 * @Override public List<Order> readAll() { List<Order> orders =
+	 * orderDao.readAll(); if(orders.isEmpty()) { LOGGER.info("No orders in IMS.");
+	 * } else { for (Order order : orders) { LOGGER.info(order); } } return orders;
+	 * }
+	 */
     
     @Override 
     public Order create() {
@@ -48,8 +43,9 @@ public class OrderController implements ICrudController<Order> {
    	        return order; 
     }
    
-    public Object read() {
-    	LOGGER.info("Would you like to: 1) View all orders 2) Calculate the value of an order? \n Enter the number of your choice. All other input exits menu.");
+    @Override
+    public List<Order> readAll() {
+    	LOGGER.info("Would you like to: 1) View all orders, 2) View specific order \n Enter the number of your choice. All other input exits menu.");
     	Long input = javaUtilities.getLong();
     	if(input == 1) {
     		List<Order> orders = orderDao.readAll();
@@ -57,10 +53,10 @@ public class OrderController implements ICrudController<Order> {
     			LOGGER.info(order);	
     		} return orders;
 			} else if(input == 2) {
-			 LOGGER.info("Enter ID of the order whose total you wish to calculate."); 
+			 LOGGER.info("Enter ID of the order whose total you wish to view."); 
 			 Long id = javaUtilities.getLong();
-			 double orderValue = orderDao.sumOrder(id);
-			 return orderValue;
+		     LOGGER.info(orderDao.read(id));
+			 return null;
 			} else {
     		LOGGER.info("Leaving read orders.");
     	}
@@ -79,11 +75,11 @@ public class OrderController implements ICrudController<Order> {
 	        if(input.equals("add")) {
 	        	LOGGER.info("Enter ID of item to add to order.");
 	        	Long toAdd = javaUtilities.getLong();
-	        	nullOrder = this.orderDao.addItems(id, toAdd);
+	        	nullOrder = this.orderDao.addItem(id, toAdd);
 	        } else if(input.equals("remove")) {
 	            LOGGER.info("Enter ID of item to remove from order.");
 	            Long toRemove = javaUtilities.getLong();
-	            orderDao.deleteItem(toRemove, id);
+	            orderDao.deleteItem(id, toRemove);
 	        }	else {
 	        	LOGGER.info("Leaving update. Only \"add\" and \"remove\" allowed.");
 	        }

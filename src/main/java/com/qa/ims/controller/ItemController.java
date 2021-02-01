@@ -68,7 +68,6 @@ public class ItemController implements ICrudController<Item> {
 		        String p = javaUtilities.getString();
 		        try {
 		        	double price = Double.parseDouble(p);
-		        	//convert to double
 			        Item item = itemDao.update(new Item(id, name, price));
 			        LOGGER.info("item Updated");
 			        return item;
