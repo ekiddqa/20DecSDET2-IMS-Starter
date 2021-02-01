@@ -1,6 +1,7 @@
-Coverage: 53.7%
+Coverage: 64.7%
 ## IMS 
 A barebones CI IMS. A learning exercise in Java to aid and demonstrate key concepts of Java within a more complex system. 
+P.S. dev branch accidentally called called "feature" (no suffix) and attempts to change this in GIT Bash tells me there already exists a DEV branch.
 
 ## Getting Started
 
