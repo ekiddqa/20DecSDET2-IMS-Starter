@@ -56,4 +56,9 @@ public class CustomerDAOTest {
     public void testDelete() {
         assertEquals(1, DAO.delete(1));
     }
+    
+    @Test
+    public void testReadError() {
+    	assertEquals(null, DAO.read(null));
+    }
 }

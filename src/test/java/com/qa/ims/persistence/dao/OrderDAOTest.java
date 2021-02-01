@@ -86,7 +86,7 @@ public class OrderDAOTest {
     public void testAddItem() {
     	Item testItemDuo = new Item(3L, "jordan", 50);
     	System.out.println(testItemDuo.getId());
-    	//DAO.addItem(1L, testItemDuo.getId());
+    	DAO.addItem(1L, testItemDuo.getId());
     	//This keeps saying that x item does not exist seemingly
     	//no matter what I put in - that or a null pointer
     }
@@ -103,4 +103,16 @@ public class OrderDAOTest {
     	System.out.println(stuff.toString());
     	assertEquals(stuff, DAO.getItems(testOrderStuff.getId()));
     }
+    
+    @Test
+    public void testCreateError() {
+    	Order error = new Order(3L, null, testItemList, 0.0);
+    	assertEquals(null, DAO.create(error));
+    }
+    
+    @Test
+    public void testReadError() {
+    	assertEquals(null, DAO.read(null));
+    }
+    
 }

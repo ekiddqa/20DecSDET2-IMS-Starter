@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.qa.ims.persistence.domain.Item;
+import com.qa.ims.persistence.domain.Order;
 import com.qa.ims.utils.DatabaseUtilities;
 
 public class ItemDAOTest {
@@ -25,15 +26,15 @@ public class ItemDAOTest {
 	
     @Test
     public void testCreate() {
-    	final Item created = new Item(2L, "Alphabet", 22.22);
-    	assertEquals("Expected: Inputting typically expected values. Should add an item called \"Alphabet\" with price \"22.22\"to items table.", created, DAO.create(created));
+    	final Item created = new Item(2L, "TestItem", 22.22);
+    	assertEquals(created, DAO.create(created));
     }
 
     @Test
     public void testReadAll() {
         List<Item> expected = new ArrayList<>();
         expected.add(new Item(1L, "jordan", 50));
-        assertEquals("Expected: Outputs an item called \"Jordan\" with a price of £50", expected, DAO.readAll());
+        assertEquals(expected, DAO.readAll());
     }
     
     @Test
@@ -58,4 +59,11 @@ public class ItemDAOTest {
     public void testDelete() {
         assertEquals(1, DAO.delete(1));
     }
+    
+    
+    @Test
+    public void testReadError() {
+    	assertEquals(null, DAO.read(null));
+    }
+    
 }
