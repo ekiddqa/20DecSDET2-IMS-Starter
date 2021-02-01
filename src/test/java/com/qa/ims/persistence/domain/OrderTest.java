@@ -1,13 +1,15 @@
 package com.qa.ims.persistence.domain;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.junit.Test;
 
 import nl.jqno.equalsverifier.EqualsVerifier;
+
+import static org.junit.Assert.assertEquals;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class OrderTest {
 	List<Item> testItems = new ArrayList<>();
@@ -22,13 +24,13 @@ public class OrderTest {
 	
 	@Test
 	public void testCalulateValueZero() {
-		assertEquals(testOrder.getValue(), testOrder.calculateValue());
+		assertEquals(testOrder.getValue(), testOrder.calculateValue(), 0.9f);
 	}
 	
 	@Test
 	public void testCalulateValue() {
 		testItems.add(testItem);
-		assertEquals(testItem.getPrice(), testOrder.calculateValue());
+		assertEquals(testItem.getPrice(), testOrder.calculateValue(),0.9f);
 	}
 	
 	@Test

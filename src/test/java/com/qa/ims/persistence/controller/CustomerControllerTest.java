@@ -19,7 +19,6 @@ import nl.jqno.equalsverifier.EqualsVerifier;
 
 public class CustomerControllerTest {
 	private final CustomerDao DAO = new CustomerDao();
-	private final Customer testCustomer = new Customer("jordan", "harrison");
 	private JavaUtilities javaUtilities;
 	private final CustomerController controller = new CustomerController(DAO, javaUtilities);
 	
@@ -28,7 +27,6 @@ public class CustomerControllerTest {
         DatabaseUtilities.connect();
         DatabaseUtilities.getInstance().init("src/test/resources/sql-schema.sql", "src/test/resources/sql-data.sql");
         final CustomerDao DAO = new CustomerDao();
-    	final Customer testCustomer = new Customer("jordan", "harrison");
     	final CustomerController controller = new CustomerController(DAO, javaUtilities);
     }
     

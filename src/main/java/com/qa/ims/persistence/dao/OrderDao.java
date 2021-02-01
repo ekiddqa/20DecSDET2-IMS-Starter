@@ -132,6 +132,11 @@ public class OrderDao implements IDomainDao<Order> {
 	    
 	    @Override
 	    public Order update(Order order) { //Leftover from interface as this has been split into addItem and deleteItem
+	    	//Not sure how to repurpose this method to include the functionality
+	    	//To comply with SOLID
+	    	//The alternative would be to modify the interface
+	    	//but order is already tempremental and I'm not confident with messing with something so fundamental to the code
+	    	//with my current skill level
 	        return null;
 	    }
 
