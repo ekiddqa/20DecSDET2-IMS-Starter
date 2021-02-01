@@ -27,7 +27,7 @@ public class JavaUtilities {
                 input = getString();
                 longInput = Long.parseLong(input);
             } catch (NumberFormatException nfe) {
-                LOGGER.info("Error - Please enter a number");
+                LOGGER.info("Error - Please enter a number or 0 to exit.");
             }
         } while (longInput == null);
         return longInput;
