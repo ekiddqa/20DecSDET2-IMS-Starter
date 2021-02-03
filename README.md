@@ -33,11 +33,11 @@ This won't change default settings. Go to your search field in your OS.
 
 Type in "Command" into the search field.
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804547805896376340/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804547805896376340/unknown.png)
 
 Right click on the command prompt (or whatever your version of Windows calls the command line) and select "Run as administrator".
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804548276724301845/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804548276724301845/unknown.png)
 
 End with an example of getting some data out of the system or using it for a little demo
 
@@ -45,7 +45,7 @@ End with an example of getting some data out of the system or using it for a lit
 Everytime you run command line it'll be ran as an admin with the benefits that entails. Follow the previous method up to right the right click. Instead of clicking "Run as administrator",
 click on "open file location"
 
-!(https://cdn.discordapp.com/attachments/761214563660070922/804549922841296916/unknown.png)
+![](https://cdn.discordapp.com/attachments/761214563660070922/804549922841296916/unknown.png)
 
 This will take you to the shortcut location. Right click on "Command Prompt" (or your Window's version) shortcut in the Windows Explorer and select "Properties"
 
@@ -57,7 +57,7 @@ Go to the "Shortcut" tab and then to "Advanced button".
 
 You should see the option to "Run as administrator". Check this box if it's not already. Click "OK" then "Apply" to make the changes go into effect.
 
-https://cdn.discordapp.com/attachments/761214563660070922/804551313370906664/unknown.png
+![]https://cdn.discordapp.com/attachments/761214563660070922/804551313370906664/unknown.png
 
 A quick way to open command line is "Ctrl + r" and then type in "cmd".
 
